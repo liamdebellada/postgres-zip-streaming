@@ -1,25 +1,21 @@
-# Stream Postgres rows into a writeable stream as zip
+# Stream Postgres Rows into a Writable Stream as a Zip
 
 ## About
 
-This project implements the logic required to stream postgres rows from a large
-query directly into a writeable stream. The stream could be used in a web
-server, or just to write to a file (as per this example).
+This project implements the logic required to stream Postgres rows from a large query directly into a writable stream.
+The stream can be used in a web server or to write to a file (as shown in this example).
 
-## Running locally
+## Running Locally
 
-> Note: For this example you need a postgres database running.
+> **Note**: For this example, you need a running Postgres database.
 
 ```bash
 docker build -t pg-stream . && \
 docker run --net=host \
--v ./:/app/archives \
+-v $(pwd)/archives:/app/archives \
 -e PG_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/ \
 -e MAX_ARCHIVE_QUEUE_LEN=100 \
 -e ZIP_OUTPUT_DIR=./archives \
 -e EXAMPLE_PG_ROWS=1000000 \
-deno-comp
+pg-stream
 ```
-
-> You can play with `EXAMPLE_PG_ROWS` and `MAX_ARCHIVE_QUEUE_LEN` to see the
-> impact on memory and CPU usage.
