@@ -1,7 +1,8 @@
 {
   "tasks": {
     "start": "deno run -A --env-file src/main.ts",
-    "dev": "deno run -A --env-file --watch src/main.ts"
+    "dev": "deno run -A --env-file --watch src/main.ts",
+    "check": "deno check . && deno lint . && deno fmt --check"
   },
   "imports": {
     "pg": "npm:pg@8.13.1",

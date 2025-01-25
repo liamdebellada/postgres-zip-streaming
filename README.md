@@ -2,8 +2,9 @@
 
 ## About
 
-This project implements the logic required to stream postgres rows from a large query directly into a writeable stream.
-The stream could be used in a web server, or just to write to a file (as per this example).
+This project implements the logic required to stream postgres rows from a large
+query directly into a writeable stream. The stream could be used in a web
+server, or just to write to a file (as per this example).
 
 ## Running locally
 
@@ -20,4 +21,5 @@ docker run --net=host \
 deno-comp
 ```
 
-> You can play with `EXAMPLE_PG_ROWS` and `MAX_ARCHIVE_QUEUE_LEN` to see the impact on memory and CPU usage.
+> You can play with `EXAMPLE_PG_ROWS` and `MAX_ARCHIVE_QUEUE_LEN` to see the
+> impact on memory and CPU usage.

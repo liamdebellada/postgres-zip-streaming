@@ -20,7 +20,7 @@ const parseRow = (row: unknown[]) =>
     row.toString(),
   ] as const;
 
-if (!existsSync(env.ZIP_OUTPUT_DIR)) mkdirSync(env.ZIP_OUTPUT_DIR, {});
+if (!existsSync(env.ZIP_OUTPUT_DIR)) mkdirSync(env.ZIP_OUTPUT_DIR);
 
 // Example stream, could be any writeable stream.
 const fileStream = createWriteStream(`${env.ZIP_OUTPUT_DIR}/output.zip`);
