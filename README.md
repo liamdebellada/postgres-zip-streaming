@@ -16,5 +16,8 @@ docker run --net=host \
 -e PG_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/ \
 -e MAX_ARCHIVE_QUEUE_LEN=100 \
 -e ZIP_OUTPUT_DIR=./archives \
+-e EXAMPLE_PG_ROWS=1000000 \
 deno-comp
 ```
+
+> You can play with `EXAMPLE_PG_ROWS` and `MAX_ARCHIVE_QUEUE_LEN` to see the impact on memory and CPU usage.

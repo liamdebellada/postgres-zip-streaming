@@ -1,5 +1,5 @@
 import { Buffer } from "node:buffer";
-import { createWriteStream } from "node:fs";
+import { createWriteStream, existsSync, mkdirSync } from "node:fs";
 
 import env from "./env.ts";
 import client from "./db.ts";
@@ -11,7 +11,7 @@ console.log("Client connected");
 
 const query = createQuery(client);
 const rowStream = query("SELECT * FROM generate_series(0, $1) num", [
-  1_000_000,
+  env.EXAMPLE_PG_ROWS,
 ]);
 
 const parseRow = (row: unknown[]) =>
@@ -19,6 +19,8 @@ const parseRow = (row: unknown[]) =>
     Buffer.from(row[0]!.toString()),
     row.toString(),
   ] as const;
+
+if (!existsSync(env.ZIP_OUTPUT_DIR)) mkdirSync(env.ZIP_OUTPUT_DIR, {});
 
 // Example stream, could be any writeable stream.
 const fileStream = createWriteStream(`${env.ZIP_OUTPUT_DIR}/output.zip`);
