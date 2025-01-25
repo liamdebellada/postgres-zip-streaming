@@ -1,6 +1,7 @@
 import { Buffer } from "node:buffer";
 import { createWriteStream } from "node:fs";
 
+import env from "./env.ts";
 import client from "./db.ts";
 import { createQuery } from "./query.ts";
 import { streamDataToArchive } from "./archive.ts";
@@ -20,7 +21,7 @@ const parseRow = (row: unknown[]) =>
   ] as const;
 
 // Example stream, could be any writeable stream.
-const fileStream = createWriteStream("./test.zip");
+const fileStream = createWriteStream(`${env.ZIP_OUTPUT_DIR}/output.zip`);
 await streamDataToArchive(rowStream, fileStream, parseRow);
 
 client.end();
