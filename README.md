@@ -3,8 +3,8 @@
 ## About
 
 This project implements the logic required to stream Postgres rows from a large
-query directly into a writable stream. The stream can be used in a web server or
-to pipe directly to another stream (uploading to S3 for example).
+query directly into a writable zip stream. The zip stream could be piped to a response (like in this example), or piped
+into something like S3.
 
 ## Running Locally
 
