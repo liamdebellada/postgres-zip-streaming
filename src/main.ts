@@ -1,5 +1,6 @@
+import process from "node:process";
 import { Buffer } from "node:buffer";
-import { createWriteStream, existsSync, mkdirSync } from "node:fs";
+import { Writable } from "node:stream";
 
 import env from "./env.ts";
 import client from "./db.ts";
@@ -10,20 +11,35 @@ await client.connect();
 console.log("Client connected");
 
 const query = createQuery(client);
-const rowStream = query("SELECT * FROM generate_series(0, $1) num", [
-  env.EXAMPLE_PG_ROWS,
-]);
 
-const parseRow = (row: unknown[]) =>
-  [
-    Buffer.from(row[0]!.toString()),
-    row.toString(),
-  ] as const;
+const server = Deno.serve(() => {
+  const rowStream = query("SELECT * FROM generate_series(0, $1) num", [
+    env.EXAMPLE_PG_ROWS,
+  ]);
 
-if (!existsSync(env.ZIP_OUTPUT_DIR)) mkdirSync(env.ZIP_OUTPUT_DIR);
+  const parseRow = (row: unknown[]) =>
+    [
+      Buffer.from(row[0]!.toString()),
+      row.toString(),
+    ] as const;
 
-// Example stream, could be any writeable stream.
-const fileStream = createWriteStream(`${env.ZIP_OUTPUT_DIR}/output.zip`);
-await streamDataToArchive(rowStream, fileStream, parseRow);
+  const transformStream = new TransformStream();
 
-client.end();
+  streamDataToArchive(
+    rowStream,
+    Writable.fromWeb(transformStream.writable),
+    parseRow,
+  );
+
+  return new Response(transformStream.readable, {
+    headers: {
+      "Content-Type": "application/zip",
+      "Content-Disposition": 'attachment; filename="example.zip"',
+    },
+  });
+});
+
+process.on("SIGTERM", async () => {
+  await server.shutdown();
+  client.end();
+});

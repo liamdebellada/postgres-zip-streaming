@@ -1,5 +1,5 @@
 import type { Buffer } from "node:buffer";
-import { WriteStream } from "node:fs";
+import { Writable } from "node:stream";
 
 // @deno-types="@types/archiver"
 import archiver, { Archiver } from "archiver";
@@ -16,7 +16,7 @@ type ArchiveWithQueue = {
 
 export const streamDataToArchive = async (
   dataStream: QueryStream,
-  writeStream: WriteStream,
+  writeStream: Writable,
   parseRow: (row: unknown[]) => readonly [Buffer, string],
 ) => {
   const archive = archiver("zip");
