@@ -2,8 +2,9 @@
 
 ## About
 
-This project implements the logic required to stream Postgres rows from a large query directly into a writable stream.
-The stream can be used in a web server or to pipe directly to another stream (uploading to S3 for example).
+This project implements the logic required to stream Postgres rows from a large
+query directly into a writable stream. The stream can be used in a web server or
+to pipe directly to another stream (uploading to S3 for example).
 
 ## Running Locally
 
