@@ -13,4 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/process /app/process
 
+EXPOSE 8000
+
 CMD ["/app/process"]
