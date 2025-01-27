@@ -1,6 +1,5 @@
 import process from "node:process";
 import { Buffer } from "node:buffer";
-import { Writable } from "node:stream";
 
 import { z } from "zod";
 
@@ -41,7 +40,7 @@ const server = Deno.serve((request) => {
 
   streamDataToArchive(
     rowStream,
-    Writable.fromWeb(transformStream.writable),
+    transformStream.writable,
     parseRow,
   );
 

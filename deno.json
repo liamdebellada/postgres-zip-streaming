@@ -7,9 +7,9 @@
   "imports": {
     "pg": "npm:pg@8.13.1",
     "zod": "npm:zod@3.24.1",
-    "archiver": "npm:archiver@7.0.1",
     "pg-query-stream": "npm:pg-query-stream@4.7.1",
     "@types/pg": "npm:@types/pg@8.11.11",
-    "@types/archiver": "npm:@types/archiver@6.0.3"
-  }
+    "@zip-js/zip-js": "npm:@zip.js/zip.js"
+  },
+  "nodeModulesDir": "manual"
 }

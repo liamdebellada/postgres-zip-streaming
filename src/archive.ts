@@ -1,46 +1,25 @@
 import type { Buffer } from "node:buffer";
-import { Writable } from "node:stream";
 
-// @deno-types="@types/archiver"
-import archiver, { Archiver } from "archiver";
+import * as zip from "@zip-js/zip-js";
 import type QueryStream from "pg-query-stream";
-
-import env from "./env.ts";
-
-type ArchiveWithQueue = {
-  _queue: {
-    length: () => number;
-    drain: () => Promise<void>;
-  };
-} & Archiver;
 
 export const streamDataToArchive = async (
   dataStream: QueryStream,
-  writeStream: Writable,
+  writeStream: WritableStream,
   parseRow: (row: unknown[]) => readonly [Buffer, string],
 ) => {
-  const archive = archiver("zip");
-  archive.pipe(writeStream);
-
-  const cleanupPromise = new Promise<void>((resolve) => {
-    dataStream.on("end", () => {
-      archive.finalize();
-      resolve();
-    });
-  });
+  const zipWriter = new zip.ZipWriter(writeStream, { compressionMethod: 0 });
 
   for await (const row of dataStream) {
     const [buffer, name] = parseRow(row);
 
-    const { _queue } = archive.append(
-      buffer,
-      { name },
-    ) as ArchiveWithQueue;
+    await zipWriter.add(
+      name,
+      new Blob([buffer]).stream(),
+    );
 
-    if (_queue.length() > env.MAX_ARCHIVE_QUEUE_LEN) {
-      await _queue.drain();
-    }
+    await zip.terminateWorkers();
   }
 
-  return cleanupPromise;
+  await zipWriter.close();
 };

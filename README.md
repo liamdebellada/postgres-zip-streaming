@@ -17,7 +17,6 @@ docker build -t pg-stream . && \
 docker run --net=host \
 -p 8000:8000 \
 -e PG_CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/ \
--e MAX_ARCHIVE_QUEUE_LEN=100 \
 -e EXAMPLE_PG_ROWS=1000000 \
 pg-stream
 ```
